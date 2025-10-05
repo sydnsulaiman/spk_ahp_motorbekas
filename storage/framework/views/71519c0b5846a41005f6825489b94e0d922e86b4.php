@@ -1,0 +1,122 @@
+
+
+<?php $__env->startSection('content'); ?>
+    <div class="page-heading">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                    <h3>Perhitungan</h3>
+                </div>
+                
+            </div>
+        </div>
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                  
+
+                    <!--FORM TAMBAH MODAL -->
+                    
+                    
+
+                   
+
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" id="table1">
+                        <thead>
+                            <tr>
+                                
+                                <th >No</th>
+                                <th >Nama User</th>
+                                <th >---</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $__empty_1 = true; $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <tr>
+                                    
+                                    <td><?php echo e($loop->iteration); ?></td>
+                                    <td><?php echo e($item->nama_user); ?></td>
+                                    <td style="width: 20%">
+                                        <a href="<?php echo e(route("perhitungan.detail", $item->id)); ?>" class="btn btn-primary">
+                                            <dt class="the-icon"><i class="fa fa-list-alt"></i></dt>
+                                        </a>
+                                        
+                                        <a href="#" class="btn btn-danger deleteRecord" data-id=<?php echo e($item->id); ?>>
+                                             <dt class="the-icon"><span class="fa-fw select-all fas"></span></dt>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                
+                            <?php endif; ?>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('script'); ?>
+    <script>
+    
+
+
+        $(".deleteRecord").click(function(){
+            var id = $(this).data("id");
+            var token =  $("meta[name='csrf-token']").attr("content");
+            if (confirm("Apakah anda yakin ingin menghapus data tersebut!!") == true) {
+                $.ajax(
+                    {
+                        url: "kriteria/"+id,
+                        type: 'DELETE',
+                        data: {
+                            "id": id,
+                            "_token": token,
+                        },
+                        success: function (response){
+                            console.log("it Works");
+                            
+                                Toastify({
+                                    text: "Data telah diperbaharui",
+                                    duration: 3000,
+                                    close:true,
+                                    gravity:"top",
+                                    position: "right",
+                                    backgroundColor: "#4fbe87",
+                                }).showToast();
+                            setTimeout(() => {
+                                location.reload()
+                            }, 3000);
+                            
+                        }
+                    });
+            }
+        
+        });
+
+        function getEditData(id){
+            let form = document.getElementById('form-edit-data');
+            const url =`/kriteria/${id}/edit`;
+            console.log('ID', id);
+
+            $.get(url, function (data) {
+                console.log('DATA', data)
+                $('#warning').modal('show');
+                $('#nama-kriteria').val(data.nama_kriteria);
+                $('#kode-kriteria').val(data.kode_kriteria);
+                form.setAttribute('data-id', data.id);
+                form.setAttribute('data-action', '/kriteria/');
+                
+                // output.src = `<?php echo e(asset('gambar_produk')); ?>/${data.gambar}`
+
+            })
+        }
+    </script>
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\xamp\htdocs\si_ahp_motorbekas\resources\views/perhitungan/index.blade.php ENDPATH**/ ?>
